@@ -32,13 +32,15 @@ if location == -1:
 paths = ["special://xbmc/addons/", "special://home/addons/"]
 path = paths[location]
 old_path = d.browse(0, 'Choose Original Skin Folder', 'files', '', False, False, path)
-
+if not old_path or old_path == path:
+    quit()
 old_skin = old_path.split('/')[-2]
 new_skin = d.input("New Skin Folder (%s)" % old_skin, old_skin+'.fast')
-
+if not new_skin:
+    quit()
 new_path = 'special://home/addons/%s/' % new_skin
 if xbmcvfs.exists(new_path):
-    ok = d.ok('Folder already exists.', 'Overwrite? (%s)' % new_path)
+    ok = d.ok('Folder already exists', 'Overwrite %s ?' % new_path)
     if not ok:
         quit()
 
@@ -46,4 +48,4 @@ xml = xbmcvfs.File(old_path+'addon.xml','rb').read()
 old_skin_name = re.search('<addon.*?name="(.*?)"',xml,flags=(re.DOTALL | re.MULTILINE)).group(1)
 new_skin_name = d.input('New Skin Name (%s)' % old_skin_name, old_skin_name+' Fast')
 copyTree(old_path,new_path)
-d.ok('Skin Tightener','Restart Kodi and Select %s as Skin' % new_skin_name)
+d.ok('Skin Tightener','Restart Kodi and Select "%s" as Skin' % new_skin_name)
