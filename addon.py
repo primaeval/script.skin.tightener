@@ -18,6 +18,7 @@ def copyTree(src,dst):
             if ext == 'xml':
                 xml = re.sub('time=".*?"','time="0"',xml)
                 xml = re.sub(r'(<scrolltime.*?>)(.*?)(</scrolltime>)',r'\g<1>0\g<3>',xml)
+                xml = re.sub(r'(fadetime.*?>)(.*?)(</fadetime>)',r'\g<1>0\g<3>',xml)
             xml = re.sub(re.escape(old_skin),new_skin,xml) 
             xml = re.sub(re.escape(old_skin_name),new_skin_name,xml)
             xbmcvfs.File(dst+f,'wb').write(xml)
