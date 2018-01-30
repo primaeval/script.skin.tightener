@@ -41,6 +41,28 @@ old_skin = old_path.split('/')[-2]
 new_skin = d.input("New Skin Folder (%s)" % old_skin, old_skin+'.fast')
 if not new_skin:
     quit()
+
+xml = xbmcvfs.File(old_path+'addon.xml','rb').read()
+old_skin_name = re.search('<addon.*?name="(.*?)"',xml,flags=(re.DOTALL | re.MULTILINE)).group(1)
+new_skin_name = d.input('New Skin Name (%s)' % old_skin_name, old_skin_name+' Fast')
+
+if d.yesno('Skin Tightener','Make zip file'):
+    new_path = 'special://temp/%s/%s/' % (new_skin,new_skin)
+    if xbmcvfs.exists(new_path):
+        ok = d.ok('Folder already exists', 'Overwrite %s ?' % new_path)
+        if not ok:
+            quit()
+
+    #copyTree(old_path,new_path)
+    #output_path ='special://temp/'+new_skin+'/'+new_skin+'/'
+    output_top_path ='special://temp/'+new_skin+'/'
+    output_zip = 'special://temp/'+new_skin
+    copyTree(old_path,new_path)
+    #copyTree(new_path,output_path,False)
+    shutil.make_archive(xbmc.translatePath(output_zip), 'zip', xbmc.translatePath(output_top_path))
+    xbmc.executebuiltin('ActivateWindow(AddonBrowser)')
+
+quit()
 new_path = 'special://home/addons/%s/' % new_skin
 #new_path = 'special://temp/%s/%s/' % (new_skin,new_skin)
 if xbmcvfs.exists(new_path):
