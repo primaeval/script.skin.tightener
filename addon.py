@@ -61,7 +61,6 @@ new_skin_name = d.input('New Skin Name (%s)' % old_skin_name, old_skin_name+' Fa
 copyTree(old_path,new_path)
 
 xbmc.executebuiltin("UpdateLocalAddons")
-xbmc.executebuiltin("UpdateAddonRepos")
 time.sleep(2)
 params = '"method":"Addons.SetAddonEnabled","params":{"addonid":"%s","enabled":true}'% new_skin
 try:
